@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { getInitData } from './selectors';
 import { init } from './reducer';
 
+import './style/style.scss';
+
 const stateToProps = state => ({
   initData: getInitData(state),
 });
@@ -17,7 +19,7 @@ class App extends React.Component {
   render() {
     const { initData, initAction } = this.props;
     return (
-      <div>
+      <div className="red-color">
         {`Hello World! ${initData}`}
         <button type="button" onClick={() => { initAction({ init: 'Init Done' }); }}>Press it!</button>
       </div>

@@ -1,12 +1,6 @@
 {
     "presets": [
-        [
-            "@babel/preset-env",
-            {
-                "useBuiltIns": "usage",
-                "corejs": 2,
-            }
-        ],
+        "@babel/preset-env",
         "@babel/preset-react"
     ],
     "plugins": [
@@ -14,6 +8,16 @@
             "@babel/plugin-proposal-decorators",
             {
                 "legacy": true,
+            }
+        ],
+        [
+            "@babel/plugin-transform-runtime",
+            {
+                "absoluteRuntime": false,
+                "corejs": false,
+                "helpers": true,
+                "regenerator": true,
+                "useESModules": false
             }
         ]
     ]

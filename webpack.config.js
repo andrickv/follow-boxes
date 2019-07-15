@@ -1,5 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+process.env.NODE_ENV = 'development';
 
 module.exports = {
   mode: process.env.NODE_ENV,
@@ -18,13 +21,33 @@ module.exports = {
     historyApiFallback: true,
     overlay: true,
   },
-  plugins: [new webpack.EnvironmentPlugin(process.env)],
+  plugins: [
+    new webpack.EnvironmentPlugin(process.env),
+    new MiniCssExtractPlugin({
+      filename: process.env.NODE_ENV === 'development' ? '[name].css' : '[name].[hash].css',
+      chunkFilename: process.env.NODE_ENV === 'development' ? '[id].css' : '[id].[hash].css',
+    }),
+  ],
   module: {
     rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
         use: ['babel-loader', 'eslint-loader'],
+      },
+      {
+        test: /\.s(a|c)ss$/,
+        exclude: /\.module.(s(a|c)ss)$/,
+        loader: [
+          process.env.NODE_ENV === 'development' ? 'style-loader' : MiniCssExtractPlugin.loader,
+          'css-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: process.env.NODE_ENV === 'development',
+            },
+          },
+        ],
       },
     ],
   },
