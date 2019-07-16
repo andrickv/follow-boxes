@@ -5,9 +5,37 @@ import {
 import { getBoardData } from './selectors';
 import { BOX_ACTION, SET_BOARD_DATA } from './reducer';
 
-// import Constants from '../App/constants';
+import Constants from '../App/constants';
 
-// import { checkAndReplace, calculateBox } from './boxUtils';
+import { calculateBox } from './boxUtils';
+
+const getRandomDirection = () => {
+  const rd = Math.floor(Math.random() * 8);
+  return Object.keys(Constants.DIRECTIONS)[rd];
+};
+
+const makelevel = (box, level) => {
+  const boxes = [];
+  let i = 0;
+  while (i < level) {
+    let b;
+    do {
+      const rd = getRandomDirection();
+      b = calculateBox(boxes.length === 0 ? box : boxes[boxes.length - 1],
+        rd, rd.length === 1 ? 3 : 2);
+    } while (b === null
+    || (b.rowIndex === box.rowIndex
+      && b.colIndex === box.colIndex)
+      // eslint-disable-next-line no-loop-func
+      || boxes.find(ab => b.rowIndex === ab.rowIndex && b.colIndex === ab.colIndex)
+
+    );
+    boxes.push(b.setStatus('predict'));
+    // eslint-disable-next-line no-plusplus
+    i++;
+  }
+  return boxes;
+};
 
 function* boxActionSaga(action) {
   try {
@@ -43,9 +71,14 @@ function* boxActionSaga(action) {
     // || checkAndReplace(c, seb)
     // || c));
 
+    const boxes = makelevel(selectedBox, 10);
+
+    board = board.map(r => r.map(c => boxes
+      .find(b => b.rowIndex === c.rowIndex && b.colIndex === c.colIndex) || c));
+
     yield put({ type: SET_BOARD_DATA, payload: { board } });
   } catch (e) {
-    // console.log(e);
+    console.log(e);
   }
 }
 
