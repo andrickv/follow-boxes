@@ -1,10 +1,13 @@
 import { createAction } from 'redux-actions';
 
+import Constants from '../App/constants';
+
 export const INIT = 'INIT';
 export const INIT_DONE = 'INIT_DONE';
 
 const initialState = {
-  board: new Array(10).fill(0).map(() => new Array(10).fill(0)),
+  board: new Array(Constants.NO_ROWS).fill(0)
+    .map(() => new Array(Constants.NO_COLS).fill(0)),
 };
 
 export default (state = initialState, action) => {

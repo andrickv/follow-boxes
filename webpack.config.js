@@ -2,7 +2,25 @@ const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-process.env.NODE_ENV = 'development';
+const checkProdMode = () => {
+  const args = process.argv.slice(2);
+  return args.find(a => a.indexOf('-p') !== -1);
+};
+
+if (checkProdMode()) {
+  process.env.NODE_ENV = 'production';
+} else {
+  process.env.NODE_ENV = 'development';
+}
+
+const loadGameSettings = () => {
+  const settings = require('./gameSettings.json');
+  Object.keys(settings).forEach((k) => {
+    process.env[k] = settings[k];
+  });
+};
+
+loadGameSettings();
 
 module.exports = {
   mode: process.env.NODE_ENV,
