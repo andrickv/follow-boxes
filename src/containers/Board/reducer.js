@@ -2,24 +2,29 @@ import { createAction } from 'redux-actions';
 
 import Constants from '../App/constants';
 
-export const INIT = 'INIT';
-export const INIT_DONE = 'INIT_DONE';
+export const BOX_ACTION = 'BOX_ACTION';
+export const SET_BOARD_DATA = 'SET_BOARD_DATA';
 
 const initialState = {
   board: new Array(Constants.NO_ROWS).fill(0)
-    .map(() => new Array(Constants.NO_COLS).fill(0)),
+    .map((r, ri) => new Array(Constants.NO_COLS).fill(0)
+      .map((c, ci) => ({
+        rowIndex: ri,
+        colIndex: ci,
+        status: 'none',
+      }))),
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case INIT:
+    case SET_BOARD_DATA:
       return {
         ...state,
-        init: action.payload.init,
+        board: action.payload.board,
       };
     default:
       return state;
   }
 };
 
-export const init = createAction(INIT);
+export const boxAction = createAction(BOX_ACTION);

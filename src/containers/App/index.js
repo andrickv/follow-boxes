@@ -19,7 +19,6 @@ const actionToProps = dispatch => ({
 @connect(stateToProps, actionToProps)
 class App extends React.Component {
   render() {
-    // const { initData, initAction } = this.props;
     return (
       <div className="app">
         <header />
