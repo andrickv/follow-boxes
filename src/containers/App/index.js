@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { getInitData } from './selectors';
 import { init } from './reducer';
 
+import Board from '../Board';
+
 import './style/style.scss';
 
 const stateToProps = state => ({
@@ -17,11 +19,14 @@ const actionToProps = dispatch => ({
 @connect(stateToProps, actionToProps)
 class App extends React.Component {
   render() {
-    const { initData, initAction } = this.props;
+    // const { initData, initAction } = this.props;
     return (
-      <div className="red-color">
-        {`Hello World! ${initData}`}
-        <button type="button" onClick={() => { initAction({ init: 'Init Done' }); }}>Press it!</button>
+      <div className="app">
+        <header />
+        <main className="main-wrapper">
+          <Board />
+          <div className="stats" />
+        </main>
       </div>
     );
   }

@@ -1,3 +1,59 @@
-.red-color {
-    color: red;
+@import "./reset.css";
+
+.app {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main-wrapper {
+    flex: 1;
+    width: 100vw;
+    @media screen and (min-width: 1000px) {
+        width: 85vw;
+    }
+    background-color: gold;
+    display: flex;
+    flex-direction: column;
+    @media screen and (min-width: 1000px) {
+        flex-direction: row;
+    }
+}
+
+header {
+
+}
+
+.board-wrapper {
+    // display: flex;
+    background-color: green;
+    width: 100vw;
+    height: 60vh;
+    @media screen and (min-width: 1000px) {
+        width: 60vw;
+        height: 100vh;
+    }
+
+    .board-row {
+        display: flex;
+        flex-direction: row;
+        // flex: 1 1 auto; 
+    }
+
+    .board-box {
+        flex: 1 1 auto; 
+        background-color: gainsboro;
+        border: 0.1px solid rgb(105, 104, 104);
+    }
+}
+
+.stats {
+    background-color: gray;
+    width: 100vw;
+    height: 40vh;
+    @media screen and (min-width: 1000px) {
+        width: 40vw;
+        height: 100vh;
+    }
 }
