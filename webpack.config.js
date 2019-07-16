@@ -45,6 +45,12 @@ module.exports = {
             loader: 'sass-loader',
             options: {
               sourceMap: process.env.NODE_ENV === 'development',
+              includePaths: [
+                path.resolve(
+                  __dirname,
+                  './src/containers/App/style/',
+                ),
+              ],
             },
           },
         ],
