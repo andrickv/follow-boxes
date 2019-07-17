@@ -14,26 +14,41 @@ const getRandomDirection = () => {
   return Object.keys(Constants.DIRECTIONS)[rd];
 };
 
+const generateNextBox = (box, boxes) => {
+  const triedDirection = [];
+  let newBox;
+  do {
+    if (triedDirection.length === 8) return undefined;
+    let randomDirection;
+    do {
+      // TODO optimize random function to calculate between rest options
+      randomDirection = getRandomDirection();
+    } while (triedDirection.find(direction => direction === randomDirection) !== undefined);
+    triedDirection.push(randomDirection);
+
+    newBox = calculateBox(boxes.length === 0 ? box : boxes[boxes.length - 1],
+      randomDirection, randomDirection.length === 1 ? 3 : 2);
+  } while (newBox === null
+  || (newBox.rowIndex === box.rowIndex
+    && newBox.colIndex === box.colIndex)
+    || boxes
+      .find(ab => newBox.rowIndex === ab.rowIndex && newBox.colIndex === ab.colIndex)
+    !== undefined);
+
+  return newBox;
+};
+
 const makelevel = (box, level) => {
   const boxes = [];
   let i = 0;
   while (i < level) {
-    let b;
-    do {
-      const rd = getRandomDirection();
-      b = calculateBox(boxes.length === 0 ? box : boxes[boxes.length - 1],
-        rd, rd.length === 1 ? 3 : 2);
-    } while (b === null
-    || (b.rowIndex === box.rowIndex
-      && b.colIndex === box.colIndex)
-      // eslint-disable-next-line no-loop-func
-      || boxes.find(ab => b.rowIndex === ab.rowIndex && b.colIndex === ab.colIndex)
-
-    );
-    boxes.push(b.setStatus('predict'));
-    // eslint-disable-next-line no-plusplus
+    const newBox = generateNextBox(box, boxes);
+    if (newBox === undefined) {
+      return undefined;
+    } boxes.push(newBox.setStatus('predict'));
     i++;
   }
+
   return boxes;
 };
 
@@ -49,29 +64,10 @@ function* boxActionSaga(action) {
       return c.setStatus('none');
     }));
 
-
-    // const northBox = calculateBox(selectedBox, Constants.DIRECTIONS.N, 3);
-    // if (northBox) northBox.setStatus('predict');
-    // const southBox = calculateBox(selectedBox, Constants.DIRECTIONS.S, 3);
-    // const westBox = calculateBox(selectedBox, Constants.DIRECTIONS.W, 3);
-    // const eastBox = calculateBox(selectedBox, Constants.DIRECTIONS.E, 3);
-    // const nwb = calculateBox(selectedBox, Constants.DIRECTIONS.NW, 2);
-    // const neb = calculateBox(selectedBox, Constants.DIRECTIONS.NE, 2);
-    // const swb = calculateBox(selectedBox, Constants.DIRECTIONS.SW, 2);
-    // const seb = calculateBox(selectedBox, Constants.DIRECTIONS.SE, 2);
-
-    // board = board.map(r => r.map(c =>
-    // checkAndReplace(c, northBox)
-    // || checkAndReplace(c, southBox)
-    // || checkAndReplace(c, westBox)
-    // || checkAndReplace(c, eastBox)
-    // || checkAndReplace(c, nwb)
-    // || checkAndReplace(c, neb)
-    // || checkAndReplace(c, swb)
-    // || checkAndReplace(c, seb)
-    // || c));
-
-    const boxes = makelevel(selectedBox, 10);
+    let boxes;
+    do {
+      boxes = makelevel(selectedBox, 78);
+    } while (boxes === undefined);
 
     board = board.map(r => r.map(c => boxes
       .find(b => b.rowIndex === c.rowIndex && b.colIndex === c.colIndex) || c));
