@@ -12,4 +12,14 @@ export default {
     SE: 'SE',
     SW: 'SW',
   },
+  DIRECTIONS_STEP: {
+    N: 3,
+    S: 3,
+    E: 3,
+    W: 3,
+    NE: 2,
+    NW: 2,
+    SE: 2,
+    SW: 2,
+  },
 };
